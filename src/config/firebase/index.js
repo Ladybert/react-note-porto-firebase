@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import 'firebase/auth'
-import firebase from "firebase/compat/app";
-import 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-SgYXRen2X1BsK25kro7WRvJdTXWVoGs",
@@ -16,6 +16,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)
+const storage = getStorage(app)
+const db = getFirestore(app);
 
-export default firebase
+export { auth, storage, db };

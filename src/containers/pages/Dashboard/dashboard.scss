@@ -1,0 +1,43 @@
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2vh 5vh;
+
+    .dashboard-switcher-button {
+        display: inherit;
+        gap: 2vh;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px 16px;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &.login {
+            background-color: #007bff;
+            color: white;
+            border: none;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+
+        &.register {
+            background-color: transparent;
+            color: #007bff;
+            border: 2px solid #007bff;
+
+            &:hover {
+                color: black;
+                border: 2px solid black;
+
+            }
+        }
+    }
+}
