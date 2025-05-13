@@ -1,13 +1,13 @@
 import react from "react"
 
-const Button = ({onClick, title, loading}) => {
+const Button = ({onClick, title, loading, classNameButton=''}) => {
     if(loading) {
         return(
             <button className="btn disable">Loading ....</button>
         )
     }
     return(
-        <button className="btn" onClick={onClick}>{title}</button>
+        <button className={`btn ${classNameButton}`} onClick={onClick}>{title}</button>
     )
 }
 

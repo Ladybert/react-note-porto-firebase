@@ -1,5 +1,8 @@
 import { auth } from '../../../config/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from "firebase/firestore";
+import { db } from '../../../config/firebase';
+import { nanoid } from 'nanoid';
 
 export const registerUserAPI = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -31,7 +34,8 @@ export const loginUserAPI = (data) => (dispatch) => {
             const dataUser = {
                 email: res.user.email,
                 uid: res.user.uid,
-                emailVerified: res.user.emailVerified
+                emailVerified: res.user.emailVerified,
+                refreshToken: res.user.refreshToken
             }
             dispatch({type: 'CHANGE_LOADING', value: false})
             dispatch({type: 'CHANGE_ISLOGIN', value: true})
@@ -48,3 +52,37 @@ export const loginUserAPI = (data) => (dispatch) => {
         })
     })
 }
+
+export const addDataToAPI = (data) => (dispatch) => {
+    dispatch({ type: 'CHANGE_LOADING', value: true });
+
+    return new Promise((resolve, reject) => {
+        if (!data.title || !data.content || !data.userId) {
+        const errMsg = "❌ Gagal: Title dan content wajib diisi!";
+        console.error(errMsg);
+        dispatch({ type: 'CHANGE_LOADING', value: false });
+        reject(new Error(errMsg));
+        return;
+        }
+
+        const noteId = `${new Date().getTime()}-${nanoid(5)}`;
+        const noteData = {
+            title: data.title,
+            content: data.content,
+            createdAt: new Date(),
+            userId: data.userId
+        };
+
+        setDoc(doc(db, "notes", noteId), noteData)
+        .then(() => {
+            console.log("✅ Data berhasil ditambahkan ke Firestore:", noteData);
+            dispatch({ type: 'CHANGE_LOADING', value: false });
+            resolve(true);
+        })
+        .catch((err) => {
+            console.error("❌ Gagal menambahkan data:", err);
+            dispatch({ type: 'CHANGE_LOADING', value: false });
+            reject(err);
+        });
+    });
+};
