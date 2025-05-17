@@ -32,6 +32,10 @@ class Login extends Component {
 
         if(res) {
             console.log("login success")
+
+            sessionStorage.setItem('userData', JSON.stringify(res))
+            sessionStorage.setItem('isLogin', true)
+
             this.setState({
                 email: '',
                 password: ''

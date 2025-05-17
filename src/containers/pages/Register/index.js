@@ -30,19 +30,23 @@ class Register extends Component {
 
     handleRegisterSubmit = async () => {
         const { email, password } = this.state;
-        const res = await this.props.registerAPI({email, password}).catch(err => err)
+        const confirmRegister = window.confirm("Are you sure about the data you entered?");
 
-        if(res) {
-            this.setState({
-                email: '',
-                password: ''
-              });
-
-            this.props.navigate('/login')
-        } else {
-            console.log("register failed")
+        if(confirmRegister) {
+            const res = await this.props.registerAPI({email, password}).catch(err => err)
+    
+            if(res) {
+                this.setState({
+                    email: '',
+                    password: ''
+                  });
+    
+                this.props.navigate('/login')
+            } else {
+                console.log("register failed")
+            }
         }
-      };
+      }
 
     render() {
         return(

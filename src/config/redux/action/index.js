@@ -1,6 +1,6 @@
 import { auth } from '../../../config/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDocs , query, collection, where } from "firebase/firestore";
 import { db } from '../../../config/firebase';
 import { nanoid } from 'nanoid';
 
@@ -15,7 +15,7 @@ export const registerUserAPI = (data) => (dispatch) => {
             console.log("success:", res);
             dispatch({ type: 'CHANGE_USER', value: emailUser});
             dispatch({type: 'CHANGE_LOADING', value: false})
-            resolve(true)
+            resolve(res)
           })
           .catch((error) => {
             console.log("error:", error.code, error.message);
@@ -40,7 +40,7 @@ export const loginUserAPI = (data) => (dispatch) => {
             dispatch({type: 'CHANGE_LOADING', value: false})
             dispatch({type: 'CHANGE_ISLOGIN', value: true})
             dispatch({type: 'CHANGE_USER', value: dataUser})
-            resolve(true)
+            resolve(res)
         })
         .catch(function(error) {
             const errorCode = error.code;
@@ -58,7 +58,7 @@ export const addDataToAPI = (data) => (dispatch) => {
 
     return new Promise((resolve, reject) => {
         if (!data.title || !data.content || !data.userId) {
-        const errMsg = "❌ Gagal: Title dan content wajib diisi!";
+        const errMsg = "❌ Gagal: Title, uid dan content wajib diisi!";
         console.error(errMsg);
         dispatch({ type: 'CHANGE_LOADING', value: false });
         reject(new Error(errMsg));
@@ -85,4 +85,34 @@ export const addDataToAPI = (data) => (dispatch) => {
             reject(err);
         });
     });
+};
+
+export const getDataFromAPI = (userId) => async (dispatch) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const q = query(collection(db, "notes"), where("userId", "==", `${userId}`));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                const errMsg = "❌ Tidak ada dokumen ditemukan untuk userId ini.";
+                dispatch({ type: 'SET_NOTE_ERROR', value: errMsg })
+                dispatch({ type: 'SET_NOTE_STATUS', value: "error"}) 
+            }
+
+            const data = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+
+            dispatch({ type: 'SET_NOTE_STATUS', value: "success"}) 
+            dispatch({ type: 'SET_NOTES', value: data });
+            console.log("✅ Data berhasil diambil:", data);
+            resolve(data);
+            } catch (err) {
+                dispatch({ type: 'SET_NOTE_ERROR', value: err })
+                dispatch({ type: 'SET_NOTE_STATUS', value: "error"}) 
+                console.error("❌ Gagal mengambil data:", err);
+                reject(err);
+        }
+    })
 };

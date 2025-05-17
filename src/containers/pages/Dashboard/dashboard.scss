@@ -43,6 +43,16 @@
             cursor: pointer;
             transition: 0.3s;
             text-decoration: none;
+
+            &.log-out {
+                background-color: red;
+                color: white;
+                border: none;
+    
+                &:hover {
+                    background-color: rgb(146, 0, 0);
+                }
+            }
     
             &.login {
                 background-color: #007bff;
@@ -214,4 +224,10 @@
             }
         }
     }
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    font-weight: 600;
 }
