@@ -10,17 +10,18 @@
         position: fixed;
         top: 0;
         right: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
         width: 100%;
         height: 100%;
         transition: 0.5s;
-
+        z-index: 3;
+        
         &.active {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
             position: fixed;
-            z-index: 0;
+            z-index: 3;
         }
     }
 
@@ -123,6 +124,7 @@
         visibility: hidden;
         pointer-events: none;
         transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 999;
       
         &.active {
           opacity: 1;
@@ -190,6 +192,7 @@
 
         .card-content {
            display: flex;
+           position: relative;
             flex-direction: column;
             padding: 4vh;
             background-color: #fff;
@@ -200,10 +203,17 @@
             border-radius: 12px;
             background-color: #fff;
             transition: 0.3s;
+            z-index: 1;
 
-            .date,
-            .title {
+            .title,
+            .date {
                 margin: 0;
+            }
+
+            .title {
+                 &:hover {
+                    text-decoration: underline;
+                }
             }
 
             .content {
@@ -221,6 +231,28 @@
             &:hover {
                 box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
                 cursor: pointer;
+            }
+
+            .btn {
+                &.delete-note {
+                    position: absolute;
+                    bottom: 15px;
+                    right: 15px;
+                    color: #e74c3c;
+                    text-decoration: none;
+                    font-weight: bold;
+                    cursor: pointer;
+                    font-size: 14px;
+                    background: none;
+                    border: none;
+                    padding: 8px 32px;
+                    border-radius: 6px;
+                    transition: background-color 0.3s ease;
+                
+                    &:hover {
+                    background-color: rgba(231, 76, 60, 0.1);
+                    }
+                }
             }
         }
     }

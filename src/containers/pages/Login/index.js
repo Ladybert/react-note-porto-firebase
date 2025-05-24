@@ -28,7 +28,7 @@ class Login extends Component {
 
     handleLoginSubmit = async () => {
         const { email, password } = this.state
-        const res = await this.props.loginAPI({email, password}).catch(err => console.log(err))
+        const res = await this.props.loginAPI({email, password}).catch(err => alert(err))
 
         if(res) {
             console.log("login success")
@@ -41,9 +41,15 @@ class Login extends Component {
                 password: ''
             });
 
-            this.props.navigate('/')
+            alert("login success !")
+            setTimeout(() => {
+                this.props.navigate('/')
+            }, 350)
+
         } else {
-            console.log("login failed")
+            setTimeout(() => {
+                alert("login failed")
+            }, 350)
         }
     };
 

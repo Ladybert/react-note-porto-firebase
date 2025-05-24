@@ -14,6 +14,7 @@ import Dashboard from '../Dashboard';
 import Login from '../Login';
 import Register from '../Register';
 import { store } from '../../../config/redux'
+import GuestRoute from '../../../utils/routing/guestRoute';
 
 // CSS import
 import './App.scss';
@@ -24,8 +25,16 @@ function App() {
       <Router>
           <Routes>
             <Route path='/' exact element={<Dashboard />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={
+              <GuestRoute>
+                <Login />
+              </GuestRoute>
+              } />
+            <Route path='/register' element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+              } />
           </Routes>
       </Router>
     </Provider>

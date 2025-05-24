@@ -8,7 +8,8 @@ const Form = ({
     setContentValue, 
     onChangeTitleInput,
     onChangeContentInput,
-    loading }) => {
+    loading,
+    buttonState }) => {
 
     return (
         <>
@@ -24,7 +25,7 @@ const Form = ({
             ></textarea>
             <Button 
                 onClick={handleSubmitFunction} 
-                title='Save Idea' 
+                title={buttonState} 
                 classNameButton='save-modal' 
                 loading={loading} 
             />

@@ -1,6 +1,16 @@
 import { auth } from '../../../config/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc, getDocs , query, collection, where } from "firebase/firestore";
+import { 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword } from 'firebase/auth'
+import { 
+    doc, 
+    setDoc,
+    getDoc, 
+    getDocs, 
+    query, 
+    collection, 
+    where,
+    deleteDoc } from "firebase/firestore";
 import { db } from '../../../config/firebase';
 import { nanoid } from 'nanoid';
 
@@ -69,7 +79,7 @@ export const addDataToAPI = (data) => (dispatch) => {
         const noteData = {
             title: data.title,
             content: data.content,
-            createdAt: new Date(),
+            date: data.date,
             userId: data.userId
         };
 
@@ -115,4 +125,72 @@ export const getDataFromAPI = (userId) => async (dispatch) => {
                 reject(err);
         }
     })
+};
+
+export const updateDataFromAPI = (data) => async (dispatch) => {
+    dispatch({ type: 'CHANGE_LOADING', value: true });
+
+    try {
+        const { id: noteId, userId, ...updateFields } = data;
+        const docRef = doc(db, 'notes', noteId);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            console.warn('⚠️ Note dengan ID tersebut tidak ditemukan.');
+            dispatch({ type: 'CHANGE_LOADING', value: false });
+            return false;
+        }
+
+        const noteData = docSnap.data();
+
+        if (noteData.userId !== userId) {
+            console.warn('⚠️ Note tidak cocok atau bukan milik user.');
+            dispatch({ type: 'CHANGE_LOADING', value: false });
+            return false;
+        }
+
+        await setDoc(docRef, updateFields, { merge: true });
+        console.log('✅ Note berhasil diupdate!');
+        dispatch({ type: 'CHANGE_LOADING', value: false });
+        return true;
+
+    } catch (err) {
+        console.error('❌ Gagal mengupdate note:', err);
+        dispatch({ type: 'CHANGE_LOADING', value: false });
+        return false;
+    }
+};
+
+export const deleteDataFromAPI = (userId, noteId) => async (dispatch) => {
+  dispatch({ type: 'CHANGE_LOADING', value: true });
+  
+  try {
+      // Ambil dokumen berdasarkan noteId
+      const docRef = doc(db, 'notes', noteId);
+      const docSnap = await getDoc(docRef);
+      
+      // Cek apakah dokumen ada dan milik user yang sesuai
+      if (docSnap.exists()) {
+          const noteData = docSnap.data();
+          
+          if (noteData?.userId === userId) {
+              await deleteDoc(docRef);
+              console.log('✅ Note berhasil dihapus!');
+              dispatch({ type: 'CHANGE_LOADING', value: false });
+              return true;
+            } else {
+                console.warn('⚠️ Note tidak cocok atau tidak milik user ini.');
+            }
+        } else {
+            console.warn('⚠️ Note dengan ID tersebut tidak ditemukan.');
+        }
+        
+        dispatch({ type: 'CHANGE_LOADING', value: false });
+        return false;
+        
+    } catch (err) {
+        console.error('❌ Gagal menghapus note:', err);
+        dispatch({ type: 'CHANGE_LOADING', value: false });
+        return false;
+    }
 };
