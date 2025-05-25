@@ -11,6 +11,7 @@ import Button from '../../../components/atoms/Button';
 
 // CSS import
 import './register.scss'
+import SetPasswordToVisible from '../../../components/atoms/PasswordToggle/setPasswordToVsible';
 
 class Register extends Component {
     state = {
@@ -59,7 +60,7 @@ class Register extends Component {
                     </div>
                     <div className='input'>
                         <label htmlFor="password">Password</label>
-                        <input type='password' id='password' value={this.state.password} onChange={this.handleChangeText}/>
+                        <SetPasswordToVisible />
                     </div>
                     <Button onClick={this.handleRegisterSubmit} title="Register" loading={this.props.isLoading} />
                 </div>

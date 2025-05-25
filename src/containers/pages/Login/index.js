@@ -9,6 +9,7 @@ import Button from '../../../components/atoms/Button';
 
 // CSS import
 import './login.scss'
+import SetPasswordToVisible from '../../../components/atoms/PasswordToggle/setPasswordToVsible';
 
 class Login extends Component {
     state = {
@@ -64,7 +65,7 @@ class Login extends Component {
                     </div>
                     <div className='input'>
                         <label htmlFor="password">Password</label>  
-                        <input type='password' id='password' value={this.state.password} onChange={this.handleChangeText}/>
+                        <SetPasswordToVisible />
                     </div>
                     <Button onClick={this.handleLoginSubmit} title="Login" loading={this.props.isLoading} />
                 </div>
