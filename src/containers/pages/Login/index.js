@@ -17,6 +17,12 @@ class Login extends Component {
         password: ''
     }
 
+    componentDidMount() {
+        if (this.props.user?.email) {
+            this.setState({ email: this.props.user.email });
+        }
+    }
+
     handleRegisterSwitcher = () => {
         this.props.navigate('/register');
     }
@@ -61,11 +67,17 @@ class Login extends Component {
                 <div className='auth-card-login'>
                     <div className='input'>
                         <label htmlFor="email">Email</label>
-                        <input type='text' id='email' value={this.props.user.email ? this.props.user.email : this.state.email} onChange={this.handleChangeText}/>
+                        <input 
+                        type='text' 
+                        id='email' 
+                        value={this.state.email}
+                        onChange={this.handleChangeText}/>
                     </div>
-                    <div className='input'>
-                        <label htmlFor="password">Password</label>  
-                        <SetPasswordToVisible />
+                   <div className='input'>
+                         <SetPasswordToVisible
+                            value={this.state.password}
+                            onChange={this.handleChangeText}
+                        />
                     </div>
                     <Button onClick={this.handleLoginSubmit} title="Login" loading={this.props.isLoading} />
                 </div>

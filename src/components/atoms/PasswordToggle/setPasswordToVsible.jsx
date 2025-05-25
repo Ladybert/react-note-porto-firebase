@@ -1,12 +1,19 @@
+// SetPasswordToVisible.jsx
 import React, { useState } from 'react';
 
-const SetPasswordToVisible = () => {
+const SetPasswordToVisible = ({ value, onChange }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const toggleType = showPassword ? "text" : "password";
+    const inputType = showPassword ? "text" : "password";
 
     return (
         <>
-            <input type={toggleType} />
+            <label htmlFor="password">Password</label>
+            <input
+                id='password'
+                type={inputType}
+                value={value}
+                onChange={onChange}
+            />
             <label style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '5px' }}>
                 <input
                     type='checkbox'
@@ -17,6 +24,6 @@ const SetPasswordToVisible = () => {
             </label>
         </>
     );
-}
+};
 
-export default SetPasswordToVisible
+export default SetPasswordToVisible;

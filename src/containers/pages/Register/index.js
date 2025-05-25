@@ -59,8 +59,10 @@ class Register extends Component {
                         <input type='text' id='email' value={this.state.email} onChange={this.handleChangeText}/>
                     </div>
                     <div className='input'>
-                        <label htmlFor="password">Password</label>
-                        <SetPasswordToVisible />
+                         <SetPasswordToVisible
+                            value={this.state.password}
+                            onChange={this.handleChangeText}
+                        />
                     </div>
                     <Button onClick={this.handleRegisterSubmit} title="Register" loading={this.props.isLoading} />
                 </div>
